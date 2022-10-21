@@ -1,0 +1,14 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true
+  },
+  "editor.formatOnSave": true,
+  "stylelint.validate": ["css", "less", "postcss", "scss", "sass"],
+  "eslint.options": {
+    //指定vscode的eslint所处理的文件的后缀
+    "extensions": [".js", ".ts", ".tsx", ".jsx"]
+  },
+  "eslint.validate": ["javascript", "typescript", "typescriptreact"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode" // 保存自动格式化重要设置
+}

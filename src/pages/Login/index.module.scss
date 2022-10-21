@@ -1,0 +1,121 @@
+body {
+  :global {
+    .login-page-modal-cover {
+      .error-times {
+        color: #ff3758;
+      }
+
+      .customer-service {
+        position: absolute;
+        right: 26px;
+        bottom: 15px;
+        font-size: 24px;
+        color: #7a8dff;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .ant-modal-confirm-btns {
+        justify-content: center !important;
+
+        .ant-btn-default {
+          display: none;
+        }
+      }
+
+      .freeze-customer-service {
+        font-size: 30px;
+        color: #7588ff;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  background-image: url("~@/assets/images/login/bg.png");
+  background-size: cover;
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .welcome {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-weight: bold;
+
+      h2 {
+        margin-top: 79px;
+        margin-bottom: 22px;
+        font-size: 58px;
+        color: #fff;
+      }
+
+      h1 {
+        font-size: 80.5px;
+        color: #fff;
+      }
+    }
+
+    .tip {
+      margin: 61px 0 106px;
+      font-size: 31.5px;
+      color: #6f7087;
+    }
+
+    .form {
+      display: flex;
+      flex-direction: column;
+      font-size: 32px;
+
+      .item {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        width: 568px;
+        height: 90px;
+        padding: 0 25px;
+        margin-bottom: 47px;
+        background-color: #1e192b;
+
+        // border: solid 2px rgb(89 114 123 /  50%);
+        border-radius: 45px;
+
+        img {
+          display: block;
+          width: 34px;
+          height: 34px;
+        }
+
+        span {
+          padding: 0 12px;
+          color: #6f7087;
+        }
+
+        input {
+          min-width: 10px;
+          color: #fefeff;
+          text-align: center;
+        }
+      }
+
+      .btn {
+        width: 568px;
+        margin-top: 47px;
+        line-height: 80px;
+        color: #fff;
+        text-align: center;
+        cursor: pointer;
+        background-color: #6b7deb;
+        border-radius: 10px;
+      }
+    }
+  }
+}

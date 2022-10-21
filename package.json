@@ -1,0 +1,144 @@
+{
+  "name": "react-cli",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "dotenv -e ./config/.env.local craco start",
+    "build": "dotenv -e ./config/.env.production craco build",
+    "build:uat": "dotenv -e ./config/.env.uat craco build",
+    "build:test": "dotenv -e ./config/.env.test craco build",
+    "build:dev": "dotenv -e ./config/.env.development craco build",
+    "deploy": "dotenv -e ./config/.env craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "commit": "git cz",
+    "release": "standard-version",
+    "eslint": "eslint ./src/**/*.{js,ts,jsx,tsx}",
+    "eslint:fix": "eslint ./src/**/*.{js,ts,jsx,tsx} --fix",
+    "stylelint": "stylelint ./src/**/*.{css,scss,sass,html}",
+    "stylelint:fix": "stylelint ./src/**/*.{css,scss,sass,html} --fix",
+    "lint": "concurrently \"npm run stylelint\" \"npm run eslint\"",
+    "lint:fix": "concurrently \"npm run stylelint:fix\" \"npm run eslint:fix\""
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.8.1",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.1.1",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.4.1",
+    "@types/js-base64": "^3.3.1",
+    "@types/node": "^16.11.28",
+    "@types/ramda": "^0.28.11",
+    "@types/react": "^18.0.6",
+    "@types/react-dom": "^18.0.2",
+    "antd": "^4.20.2",
+    "antd-img-crop": "^4.2.3",
+    "array-move": "^4.0.0",
+    "axios": "^0.27.2",
+    "bignumber.js": "^9.1.0",
+    "classnames": "^2.3.1",
+    "copy-to-clipboard": "^3.3.1",
+    "craco-less": "^2.0.0",
+    "echarts": "^5.3.2",
+    "echarts-for-react": "^3.0.2",
+    "immer": "^9.0.12",
+    "js-base64": "^3.7.2",
+    "ramda": "^0.28.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-redux": "^8.0.1",
+    "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
+    "react-scripts": "5.0.1",
+    "react-sortable-hoc": "^2.0.0",
+    "redux": "^4.2.0",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0",
+    "store": "^2.0.12",
+    "swiper": "^8.1.6",
+    "typescript": "^4.6.3",
+    "use-immer": "^0.7.0",
+    "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
+    "@craco/craco": "^6.4.3",
+    "@types/redux-logger": "^3.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "commitizen": "^4.2.4",
+    "commitlint-config-cz": "^0.13.3",
+    "concurrently": "^7.1.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "cz-customizable": "^6.3.0",
+    "dotenv-cli": "^5.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.4.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.4.0",
+    "node-sass": "^7.0.1",
+    "postcss-px-scale": "^1.1.1",
+    "public-ip": "^6.0.1",
+    "react-dev-inspector": "^1.8.0",
+    "sass-loader": "^12.6.0",
+    "simple-progress-webpack-plugin": "^2.0.0",
+    "standard-version": "^9.3.2",
+    "stylelint": "^14.7.1",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-prettier-scss": "^0.0.1",
+    "stylelint-config-rational-order": "^0.1.2",
+    "stylelint-config-recess-order": "^3.0.0",
+    "stylelint-config-standard": "^25.0.0",
+    "stylelint-config-standard-scss": "^3.0.0",
+    "stylelint-declaration-block-no-ignored-properties": "^2.5.0",
+    "stylelint-order": "^5.0.0",
+    "stylelint-scss": "^4.2.0",
+    "terser-webpack-plugin": "^5.3.3",
+    "utility-types": "^3.10.0",
+    "webpackbar": "^5.0.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "lint-staged": {
+    "./src/**/*.{js, ts, jsx, tsx}": [
+      "eslint ./src/**/*.{js, ts, jsx, tsx} --fix"
+    ],
+    "*.{css, scss, sass, html}": [
+      "stylelint ./src/**/*.{css, scss, sass, html} --fix"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./nodejs/node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": ".cz-config.js"
+    }
+  }
+}
