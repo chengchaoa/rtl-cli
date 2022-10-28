@@ -1,104 +1,98 @@
-import { Layout, Menu, Avatar, Modal } from "antd";
-import { useEffect, useState, useMemo } from "react";
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
+import { Breadcrumb, Layout, Menu, Tabs } from "antd";
+import classNames from "classnames";
+import React, { useMemo, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router";
-import classnames from "classnames";
-import { getMenuList } from "@/router/utils";
-import { storage } from "@/utils/storage";
-import Time from "./components/Time";
+import { getMenuList } from "@/router/onRouteBefore";
+import { getTitleList } from "@/utils";
 import "./index.scss";
+import { useImmerReducer } from "use-immer";
+import logo from "@/assets/images/layout/logo.png";
+import MenuItem from "antd/lib/menu/MenuItem";
 import { compose, filter, isEmpty, not, isNil } from "ramda";
-// const classNames = classnames.bind(styles);
+const { Header, Content, Footer, Sider } = Layout;
 
-const { Header, Content, Sider } = Layout;
+function reducer(draft: any, action: Record<string, any>) {
+  switch (action.type) {
+    case "update":
+      return { ...draft, ...action.payload };
+    case "req":
+      draft.req = { ...draft.req, ...action.payload };
+      break;
+    case "navList":
+      draft.tabList = { ...draft.navList, ...action.payload };
+      break;
+  }
+}
+const initialState = {
+  collapsed: false,
+  breadcrumbList: []
+};
 
-const CustomLayout = () => {
+const LayoutMenu = () => {
+  const [{ breadcrumbList, collapsed }, dispatch] = useImmerReducer(reducer, initialState);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const routeData = useMemo(() => getMenuList(pathname), [pathname]);
-  const { menuList, currentMenuPath, navList, currentNavPath } = routeData;
+  const { menuList } = routeData;
 
-  useEffect(() => {
-    const menuPath = (filter(compose(not, isEmpty), pathname.split("/")) || [])[0];
-    if (isNil(currentMenuPath) || isNil(currentNavPath)) {
-      navigate("/login");
-    } else if (
-      pathname === "/" ||
-      menuList?.find((item: any) => item.key === menuPath || item.key === "/" + menuPath)
-    ) {
-      navigate(`/${currentMenuPath}/${currentNavPath}`);
-    }
-  }, [currentMenuPath, currentNavPath, menuList, navigate, pathname, routeData]);
-
-  const onclick = (data: any) => {
-    navigate(data.key);
-  };
-
-  const onNav = (data: any) => {
-    navigate(`/${currentMenuPath}/${data.key}`);
-  };
-
-  const onExit = (data: any) => {
-    Modal.confirm({
-      content: "确定要退出登录吗?",
-      wrapClassName: classnames("account-manage-ip-modal-white"),
-      icon: null,
-      centered: true,
-      maskClosable: true,
-      okText: "common.button.confirm",
-      onOk: onExitConfirm
+  const onMenuClick = ({ key }: any) => {
+    const breadcrumbList = getTitleList(key, menuList);
+    setState("update", {
+      breadcrumbList
     });
+    navigate(key);
   };
-  const onExitConfirm = () => {
-    storage.removeItem("token");
-    storage.removeItem("userInfo");
-    navigate(`/login`);
+  const setState = (type: string, val: Record<string, any>) => {
+    dispatch({ type, payload: val });
   };
-
   return (
-    <Layout hasSider className={classnames("global-layout")}>
-      <Sider className={classnames("menu-wrap")} width={226 * Number(process.env.REACT_APP_UI_ZOOM_RATIOS || 1)}>
-        <div className={classnames("logo")}>
-          <img src={require("@/assets/images/layout/logo.png")} />
+    <Layout className={classNames("global-layout")}>
+      <Sider
+        className={classNames("menu-wrap")}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(val) =>
+          setState("update", {
+            collapsed: val
+          })
+        }
+      >
+        <div className="logo-box">
+          <img src={logo} alt="logo" className="logo-img" />
+          {/* <div className={classNames("title")}>马甲包风控系统</div> */}
         </div>
-
-        <div className={classnames("user")}>
-          <Avatar
-            className={classnames("avatar")}
-            size={88}
-            src="https://i.ytimg.com/vi/5zf2RKuxYFs/hq720.jpg?sqp=-oaymwEcCNAFEJQDSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLD2ydY8MotjRPNovShevmntr0VaDw"
-          />
-          <button onClick={onExit}>{"common.button.exit"}</button>
-        </div>
-        <Menu mode="inline" defaultSelectedKeys={["/" + currentMenuPath]} items={menuList} onClick={onclick} />
+        <Menu theme="dark" defaultSelectedKeys={["0"]} mode="inline" items={menuList} onClick={onMenuClick} />
       </Sider>
-      <Layout className={classnames("site-layout")}>
-        <Header className={classnames("header")}>
-          <div className={classnames("lang")}></div>
-          <Time />
+      <Layout className="site-layout">
+        <Header>
+          <div
+            className="collapsed"
+            onClick={() =>
+              setState("update", {
+                collapsed: !collapsed
+              })
+            }
+          >
+            {collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+          </div>
         </Header>
-        <Content className={classnames("content")}>
-          <ul className={classnames("nav")}>
-            {navList?.map((item: any) => (
-              <li
-                key={item.key}
-                className={classnames({ checked: item.key === currentNavPath || item.key === "/" + currentNavPath })}
-                onClick={() => onNav(item)}
-              >
-                <div>{item.label}</div>
-              </li>
+        <Content>
+          <Breadcrumb>
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            {breadcrumbList.map((item: any) => (
+              <Breadcrumb.Item key={item}>{item}</Breadcrumb.Item>
             ))}
-          </ul>
-          <div className={classnames("main")}>
-            <Outlet />
+          </Breadcrumb>
+          <div className="main-wrap">
+            <div className={classNames("main")}>
+              <Outlet />
+            </div>
           </div>
         </Content>
+        <Footer>马甲包风控系统</Footer>
       </Layout>
     </Layout>
   );
 };
-
-export default CustomLayout;
-
-// const Aa = () => <div>fddf</div>;
-
-// export default Aa;
+export default LayoutMenu;

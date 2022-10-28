@@ -2,10 +2,9 @@ const { launchEditorMiddleware } = require("react-dev-inspector/plugins/webpack"
 const cracoLessPlugin = require("craco-less");
 const { whenProd } = require("@craco/craco");
 const path = require("path");
-const pxScale = require("postcss-px-scale");
-const TerserPlugin = require('terser-webpack-plugin')
-const WebpackBar = require('webpackbar')
-const SimpleProgressWebpackPlugin = require('simple-progress-webpack-plugin')
+const TerserPlugin = require("terser-webpack-plugin");
+const WebpackBar = require("webpackbar");
+const SimpleProgressWebpackPlugin = require("simple-progress-webpack-plugin");
 const resolve = (dir) => path.resolve(__dirname, dir);
 
 const devServerConfig = () => (config) => {
@@ -59,28 +58,30 @@ module.exports = {
                   warnings: false,
                   drop_console: true, // 生产环境下移除控制台所有的内容
                   drop_debugger: true, // 移除断点
-                  pure_funcs: ['console.log'] // 生产环境下移除console
+                  pure_funcs: ["console.log"] // 生产环境下移除console
                 }
               }
             })
-          ], []
+          ],
+          []
         )
       ]
     }
   },
-  optimization: { // 抽离公用模块
+  optimization: {
+    // 抽离公用模块
     splitChunks: {
       cacheGroups: {
         commons: {
-          chunks: 'initial',
+          chunks: "initial",
           minChunks: 2,
           maxInitialRequests: 5,
           minSize: 0
         },
         vendor: {
           test: /node_modules/,
-          chunks: 'initial',
-          name: 'vendor',
+          chunks: "initial",
+          name: "vendor",
           priority: 10,
           enforce: true
         }
@@ -100,16 +101,5 @@ module.exports = {
       }
     }
   ],
-  style: {
-    postcss: {
-      mode: "extends",
-      loaderOptions: {
-        postcssOptions: {
-          ident: "postcss",
-          plugins: [pxScale({ scale: Number(process.env.REACT_APP_UI_ZOOM_RATIOS || 1) })]
-        }
-      }
-    }
-  },
   devServer: devServerConfig()
 };

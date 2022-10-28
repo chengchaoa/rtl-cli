@@ -1,7 +1,8 @@
-import { RoutesType } from "../components/AuthRouter/types";
+import { RoutesType } from "react-router-waiter";
 import Layout from "@/layout";
+import { HomeOutlined, AppstoreOutlined, DatabaseOutlined, ToTopOutlined } from "@ant-design/icons";
 
-export const routes: RoutesType = [
+const routes = [
   {
     path: "/",
     element: <Layout />,
@@ -10,56 +11,71 @@ export const routes: RoutesType = [
     },
     children: [
       {
-        path: "order-manage",
+        path: "home",
+        component: () => import("@/pages/Home"),
         meta: {
-          title: "router.order-manage",
-          index: true
+          title: "首页",
+          icon: <HomeOutlined />
+          // disabled: true
+        }
+      },
+      {
+        path: "shelves",
+        meta: {
+          title: "上架风控",
+          icon: <ToTopOutlined />
         },
         children: [
           {
-            path: "transfer-accounts",
-            asyncElement: () => import("@/pages/Home"),
+            path: "package-name",
+            component: () => import("@/pages/Shelves/PackageName"),
             meta: {
-              title: "router.order-manage.transfer-accounts",
-              index: true
+              title: "包名风控",
+              icon: <AppstoreOutlined />
+            }
+          },
+          {
+            path: "ip",
+            component: () => import("@/pages/Shelves/Ip"),
+            meta: {
+              title: "IP风控",
+              icon: <AppstoreOutlined />
             }
           }
         ]
+      },
+
+      {
+        path: "vest",
+        component: () => import("@/pages/Vest"),
+        meta: {
+          title: "马甲数据",
+          icon: <DatabaseOutlined />
+        }
       }
     ]
   },
   {
     path: "/login",
-    asyncElement: () => import("../pages/Login"),
+    component: () => import("../pages/Login"),
     meta: {
-      title: "router.login",
-      noLogin: true,
-      hideMenu: true
+      title: "登录"
     }
   },
   {
     path: "/403",
-    asyncElement: () => import("../pages/Page403"),
+    component: () => import("../pages/Page403"),
     meta: {
-      title: "403",
-      noLogin: true,
-      hideMenu: true
+      title: "403"
     }
   },
   {
     path: "*",
-    asyncElement: () => import("../pages/Page404"),
+    component: () => import("../pages/Page404"),
     meta: {
-      title: "404",
-      noLogin: true,
-      hideMenu: true
-    }
-  },
-  {
-    // 仅用于侧边栏外链菜单
-    url: "https://github.com/neohan666/react-antd-mobx-admin",
-    meta: {
-      title: "GitHub"
+      title: "404"
     }
   }
 ];
+
+export default routes;

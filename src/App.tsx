@@ -3,9 +3,9 @@ import { BrowserRouter } from "react-router-dom";
 import { Inspector } from "react-dev-inspector";
 import { ConfigProvider } from "antd";
 
-import { routes } from "./router";
-import { onRouteBefore } from "./router/utils";
-import RouterWaiter from "./components/AuthRouter";
+import routes from "./router";
+import onRouteBefore from "./router/onRouteBefore";
+import RouterWaiter from "react-router-waiter";
 
 // 业务自定义语言
 

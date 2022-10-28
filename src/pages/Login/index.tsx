@@ -9,6 +9,7 @@ import styles from "./index.module.scss";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
 import { useLoginMutation } from "@/api/module/login.service";
+import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 const classNames = classnames.bind(styles);
 
 const initialState = {
@@ -29,7 +30,7 @@ const Login = () => {
   const [{ username, password, spinning }, dispatch] = useReducer(reducer, initialState);
   const [searchParams] = useSearchParams();
 
-  const [login, result] = useLoginMutation();
+  const [loginApi] = useLoginMutation();
 
   const onLogin = useCallback(async () => {
     if (!username) {
@@ -49,61 +50,47 @@ const Login = () => {
       }
     });
 
-    login({
-      ttl: 7200,
-      username,
-      password,
-      ip: storage.getItem("ip")
-    });
+    try {
+      const { data: res }: QueryReturnValue = await loginApi({
+        ttl: 7200,
+        username,
+        password,
+        ip: storage.getItem("ip")
+      });
 
-    // try {
-    //   const res = await request(
-    //     "/api/auth/login",
-    //     {
-    //       username,
-    //       password,
-    //       ttl: 86400, // 一天
-    //       ip: storage.get("ip")
-    //     },
-    //     {
-    //       method: "post",
-    //       noNeedLogin: true
-    //     }
-    //   );
+      if ((res as any).code === 0) {
+        const token = (res as any)?.data.access_token;
+        if (token) {
+          const base64 = token.split(".")[1];
+          const userInfo = decode(base64);
+          const roles = JSON.parse(userInfo).roles;
+          if (!roles) {
+            message.info("账号权限不足");
+            return;
+          }
+          storage.setItem("token", token);
+          localStorage.setItem("userInfo", userInfo);
+          message.success("登录成功");
+          const redirect = searchParams.get("redirect");
 
-    //   if ((res as any).code === 0) {
-    //     const token = (res as any)?.data.access_token;
-    //     if (token) {
-    //       const base64 = token.split(".")[1];
-    //       const userInfo = decode(base64);
-    //       const roles = JSON.parse(userInfo).roles;
-    //       if (!roles) {
-    //         message.info("账号权限不足");
-    //         return;
-    //       }
-    //       storage.set("token", token);
-    //       localStorage.setItem("userInfo", userInfo);
-    //       message.success("登录成功");
-    //       const redirect = searchParams.get("redirect");
-
-    //       if (redirect) {
-    //         window.location.replace(redirect);
-    //       } else {
-    //         navigate("/", { replace: true });
-    //       }
-    //     }
-    //   } else {
-    //     message.error((res as any).message);
-    //   }
-    // } finally {
-    //   dispatch({
-    //     type: "update",
-    //     payload: {
-    //       spinning: false
-    //     }
-    //   });
-    // }
-  }, [username, password, searchParams, navigate]);
+          if (redirect) {
+            window.location.replace(redirect);
+          } else {
+            navigate("/", { replace: true });
+          }
+        }
+      } else {
+        message.error((res as any).message);
+      }
+    } finally {
+      dispatch({
+        type: "update",
+        payload: {
+          spinning: false
+        }
+      });
+    }
+  }, [loginApi, navigate, password, searchParams, username]);
 
   const onKeyDown = useCallback(
     (e: any) => {
@@ -178,23 +165,22 @@ const Login = () => {
       <div className={classNames("login-page")}>
         <div className={classNames("content")}>
           <div className={classNames("welcome")}>
-            <h2 onClick={() => errorTimesModal(2)}>{"login.welcome.pre"}</h2>
-            <h1 onClick={() => accountFreeze()}>{"login.welcome"}</h1>
+            <h2 onClick={() => errorTimesModal(2)}>马甲包风控系统</h2>
           </div>
-          <div className={classNames("tip")}>{"login.tip"}</div>
+          <div className={classNames("tip")}></div>
           <form className={classNames("form")}>
             <div className={classNames("item")}>
               <img src={require("@/assets/images/login/account.png")} />
-              <span>{"login.username"}</span>
+              <span>账号</span>
               <input value={username} onChange={(e) => onChange(e, "username")} />
             </div>
             <div className={classNames("item")}>
               <img src={require("@/assets/images/login/pass.png")} />
-              <span>{"login.password"}</span>
+              <span>密码</span>
               <input type="password" value={password} onChange={(e) => onChange(e, "password")} />
             </div>
             <div className={classNames("btn")} onClick={onLogin}>
-              {"login.login"}
+              登录
             </div>
           </form>
         </div>

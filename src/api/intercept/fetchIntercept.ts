@@ -44,6 +44,7 @@ export const fetchWithIntercept: BaseQueryFn<string | FetchArgs, unknown, FetchB
   );
   console.log(result, "拦击器");
   const { data, error, meta } = result;
+
   const { request } = meta as FetchBaseQueryMeta;
   const { code, message } = data as IResultData;
   const url: string = request.url;
@@ -53,13 +54,14 @@ export const fetchWithIntercept: BaseQueryFn<string | FetchArgs, unknown, FetchB
     // 根据状态来处理错误
     printHttpError(Number(status), url);
   }
+  return result;
   // 正确的时候，根据各自后端约定来写的
-  if (Object.is(code, 0)) {
-    return result;
-  } else {
-    // TODO 打印提示信息
-    printPanel({ method: request.method, url: request.url });
-    // TODO 根据后端返回的错误提示到组件中,直接这里弹框提示也可以
-    return Promise.reject(message);
-  }
+  // if (Object.is(code, 0)) {
+  //   return result;
+  // } else {
+  //   // TODO 打印提示信息
+  //   printPanel({ method: request.method, url: request.url });
+  //   // TODO 根据后端返回的错误提示到组件中,直接这里弹框提示也可以
+  //   return Promise.reject(message);
+  // }
 };
